@@ -1,0 +1,55 @@
+---
+# AppDaemon app configuration for charge_policy_controller.
+#
+# Place this file (along with charge_policy_controller.py and models.py) in your
+# AppDaemon apps directory, e.g.:
+#
+#   /config/appdaemon/apps/charge_policy_controller/charge_policy_controller.py
+#   /config/appdaemon/apps/charge_policy_controller/models.py
+#   /config/appdaemon/apps/apps.yaml   ← this file (or merge into existing)
+#
+# AppDaemon will hot-reload the app automatically whenever a file changes.
+
+charge_policy_controller:
+  module: charge_policy_controller
+  class: ChargePolicyController
+
+  # ── Timing ──
+  # How often (in seconds) to evaluate charging conditions.
+  check_interval_seconds: 300  # (ie: 5 minutes)
+
+  # Charging window: sessions may only start/run between these times.
+  # Format: HH:MM:SS (24-hour clock)
+  charge_window_start: "06:30:00"
+  charge_window_end: "14:30:00"
+
+
+  # ── FranklinWH energy entities ──
+  # Instantaneous solar production in kW.
+  solar_power_output: sensor.franklinwh_solar_production
+
+  # Instantaneous battery power in kW.
+  # Positive = discharging (powering the home), negative = charging.
+  solar_battery_output: sensor.franklinwh_battery_use
+
+  # Instantaneous home power draw in kW (excluding the EV charger).
+  home_load: sensor.franklinwh_home_load
+
+  # ── ChargePoint charger entities ──
+  # Values are stored in secrets.yaml to keep device-specific IDs out of
+  # version control.  See /config/secrets.yaml (or appdaemon/secrets.yaml).
+
+  # Sensor: overall charger state  (e.g. "In Use", "Not Charging", "Fully Charged")
+  charger_device_state: !secret charger_device_state
+
+  # Sensor: cable plug state  (e.g. "Plugged In", "Unplugged")
+  charger_plug_state: !secret charger_plug_state
+
+  # Sensor: instantaneous power delivered to the vehicle in kW
+  charger_power_output: !secret charger_power_output
+
+  # Button: start a charging session
+  charger_turn_on: !secret charger_turn_on
+
+  # Button: stop a charging session
+  charger_turn_off: !secret charger_turn_off
