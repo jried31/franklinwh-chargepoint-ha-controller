@@ -8,11 +8,10 @@ Run with:
 
 Current decision logic under test
 ----------------------------------
-1. If device is FULLY_CHARGED, then stop session.
-2. if device is IN_USE, then stop when:
+1. if device is IN_USE, then stop when:
      a. load > solar AND peak hours (15:00–23:59)
      b. load > solar AND time is before charge_window_start
-3. If NOT_CHARGING and PLUGGED_IN, then start session if within charge window
+2. If NOT_CHARGING and PLUGGED_IN, then start session if within charge window
    (charge_window_start ≤ now < charge_window_end).
    Battery discharge state is not evaluated for start/stop decisions.
 """
@@ -110,18 +109,6 @@ class TestInitialize:
         ctrl.run_every = MagicMock()
         ctrl.initialize()
         ctrl.run_every.assert_called_once_with(ctrl.manage_charging, "now", 120)
-
-
-# ---------------------------------------------------------------------------
-# Fully charged
-# ---------------------------------------------------------------------------
-
-class TestFullyCharged:
-    def test_stops_session(self, freeze):
-        freeze(_WITHIN_WINDOW)
-        ctrl, svc = _make({"sensor.charger_state": "Fully Charged"})
-        ctrl.manage_charging({})
-        svc.assert_called_once_with("button/press", entity_id="button.charger_off")
 
 
 # ---------------------------------------------------------------------------

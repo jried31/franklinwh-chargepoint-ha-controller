@@ -4,16 +4,14 @@ Align ChargePoint EV charging state with FranklinWH solar and battery conditions
 This AppDaemon app runs every 5 minutes (configurable) and applies the
 following decision logic:
 
-  1. If fully charged, stop the charging session.
-
-  2. Actively charging:
+  1. Actively charging:
        a. Peak hours (3:00pm–11:59pm, PG&E EV2-A rate window):
           stop if charger draw ≥ solar output OR total home load ≥ solar output.
        b. Anytime: stop if solar < 0.5 kW and battery is discharging.
           This prevents the EV from draining the home battery at night or on
           heavily overcast days.
 
-  3. Plugged in, not charging:
+  2. Plugged in, not charging:
           start a session within the configured charge window (default 06:30–13:00)
           and battery is not discharging.
 
@@ -102,12 +100,6 @@ class ChargePolicyController(hass.Hass):
     def _evaluate(self) -> None:
         charger_state = self._state(self.args["charger_device_state"])
         self.log(f"Charger device state: {charger_state}")
-
-        # 1. Already fully charged — ensure the session is stopped.
-        if charger_state == ChargerDeviceState.FULLY_CHARGED.value:
-            self.log("Battery fully charged — stopping session.")
-            self._press(self.args["charger_turn_off"])
-            return
 
         plug_state = self._state(self.args["charger_plug_state"])
         solar_kw = self._float(self.args["solar_power_output"])
