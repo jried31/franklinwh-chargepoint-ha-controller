@@ -106,7 +106,7 @@ class ChargePolicyController(hass.Hass):
         battery_kw = self._float(self.args["solar_battery_output"])
 
 
-        # 2. Currently charging — decide whether to stop.
+        # 1. Currently charging — decide whether to stop.
         if charger_state == ChargerDeviceState.IN_USE.value:
             charger_kw = self._float(self.args["charger_power_output"])
             self.log(
@@ -133,7 +133,7 @@ class ChargePolicyController(hass.Hass):
                     self.log("Within charging window — charging permitted.")
 
 
-        # 3. If idle, start a charging session if within the charge window.
+        # 2. If idle, start a charging session if within the charge window.
         if (
             charger_state == ChargerDeviceState.NOT_CHARGING.value
             and plug_state == ChargerPlugState.PLUGGED_IN.value
