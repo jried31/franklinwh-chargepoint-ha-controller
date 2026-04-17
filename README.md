@@ -1,4 +1,4 @@
-# charge_policy_controller
+# Smart Charging Controller AppDaemon for FranklinWH + ChargePoint  (Home Assistant)
 
 An [AppDaemon](https://appdaemon.readthedocs.io/en/latest/) app that automatically starts and stops a **ChargePoint** home EV charger based on real-time solar production and battery state from a **FranklinWH** energy system, both surfaced through **Home Assistant**.
 
@@ -155,3 +155,6 @@ AppDaemon writes all log output to:
 - File: `/addon_configs/a0d7b954_appdaemon/appdaemon.log`
 
 Errors (unhandled exceptions with full tracebacks) are logged at `ERROR` level.
+
+## Running Unit Tests
+To run the test suite execute:  uv run --extra dev pytest

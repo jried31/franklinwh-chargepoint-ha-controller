@@ -120,7 +120,7 @@ class ChargePolicyController(hass.Hass):
 
             if charger_kw > solar_kw or total_kw > solar_kw:
                 if self._is_peak_hours():
-                    self.log("Insufficient solar during peak hours — stopping session.")
+                    self.log("Within peak hours — stopping session.")
                     self._press(self.args["charger_turn_off"])
                     return
 
