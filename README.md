@@ -1,4 +1,4 @@
-# Smart Charging Controller AppDaemon for FranklinWH + ChargePoint  (Home Assistant)
+# charge_policy_controller
 
 An [AppDaemon](https://appdaemon.readthedocs.io/en/latest/) app that automatically starts and stops a **ChargePoint** home EV charger based on real-time solar production and battery state from a **FranklinWH** energy system, both surfaced through **Home Assistant**.
 
@@ -8,7 +8,6 @@ The app runs every 5 minutes and applies this decision logic:
 
 | Condition | Action |
 |---|---|
-| Car battery is fully charged | Stop the charging session |
 | Charging past the charge window end (default 13:00) | Stop the charging session |
 | Charging during PG&E peak hours (3:00pm – midnight) and charger draw ≥ solar output, or total home load ≥ solar output | Stop the charging session |
 | Charging with solar < 0.5 kW and battery is discharging | Stop (prevents draining the home battery overnight) |
